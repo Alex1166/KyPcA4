@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<data>
+    <Rec id="1">
+        <OBJ>E</OBJ>
+        <NAME>D</NAME>
+        <FRMT>999V99</FRMT>
+        <NM>Диаметр</NM>
+        <K>1</K>
+        <LINK>$VERT.NAME=‘DIAMETR’; $Sprut.NAME=‘Diam’;</LINK>
+    </Rec>
+    <Rec id="2">
+        <OBJ>D</OBJ>
+        <NAME>TECH</NAME>
+        <FRMT>X(20)</FRMT>
+        <NM>Технолог</NM>
+        <K>1</K>
+        <LINK>$VERT.NAME=’texnolog’; $Sprut.NAME=‘KodUserCreate’;</LINK>
+    </Rec>
+</data>
