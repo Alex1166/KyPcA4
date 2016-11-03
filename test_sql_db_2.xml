@@ -7,7 +7,7 @@
         <FRMT>999V99</FRMT>
         <NM>Диаметр</NM>
         <K>1</K>
-        <LINK>$VERT.NAME=‘DIAMETR’; $Sprut.NAME=‘Diam’;</LINK>
+        <LINK>$VERT.NAME='DIAMETR'; $Sprut.NAME='Diam';</LINK>
     </Rec>
     <Rec id="2">
         <OBJ>D</OBJ>
@@ -15,6 +15,6 @@
         <FRMT>X(20)</FRMT>
         <NM>Технолог</NM>
         <K>1</K>
-        <LINK>$VERT.NAME=’texnolog’; $Sprut.NAME=‘KodUserCreate’;</LINK>
+        <LINK>$VERT.NAME='texnolog'; $Sprut.NAME='KodUserCreate';</LINK>
     </Rec>
 </data>
