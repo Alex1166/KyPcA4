@@ -4,7 +4,6 @@
     <list default="true" id="9bef3c49-b4a1-43e1-bff9-fcec6b686127" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/getVoc.py" afterPath="$PROJECT_DIR$/getVoc.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/getVoc_test.py" afterPath="$PROJECT_DIR$/getVoc_test.py" />
     </list>
     <ignored path="KyPcA4.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,21 +26,11 @@
       <file leaf-file-name="getVoc.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/getVoc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="32" column="21" selection-start-line="32" selection-start-column="21" selection-end-line="32" selection-end-column="21" />
+            <state relative-caret-position="561">
+              <caret line="57" column="27" selection-start-line="57" selection-start-column="27" selection-end-line="57" selection-end-column="27" />
               <folding>
                 <element signature="e#24#41#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="vsptd.py" pinned="false" current-in-tab="false">
-        <entry file="file://C:/Python34/Lib/site-packages/vsptd.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1872">
-              <caret line="196" column="19" selection-start-line="196" selection-start-column="19" selection-end-line="196" selection-end-column="19" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -73,8 +62,8 @@
       <list>
         <option value="$PROJECT_DIR$/test_sql_db_1.db" />
         <option value="$PROJECT_DIR$/test_sql_db_2.xml" />
-        <option value="$PROJECT_DIR$/getVoc.py" />
         <option value="$PROJECT_DIR$/getVoc_test.py" />
+        <option value="$PROJECT_DIR$/getVoc.py" />
       </list>
     </option>
   </component>
@@ -365,7 +354,14 @@
       <option name="project" value="LOCAL" />
       <updated>1478291738012</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="6">
+      <created>1478299277069</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1478299277069</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -417,7 +413,8 @@
     <MESSAGE value="3" />
     <MESSAGE value="4" />
     <MESSAGE value="5" />
-    <option name="LAST_COMMIT_MESSAGE" value="5" />
+    <MESSAGE value="6" />
+    <option name="LAST_COMMIT_MESSAGE" value="6" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -585,14 +582,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Python34/Lib/site-packages/vsptd.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1872">
-          <caret line="196" column="19" selection-start-line="196" selection-start-column="19" selection-end-line="196" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/getVoc_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -601,10 +590,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://C:/Python34/Lib/site-packages/vsptd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1872">
+          <caret line="196" column="19" selection-start-line="196" selection-start-column="19" selection-end-line="196" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/getVoc.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="32" column="21" selection-start-line="32" selection-start-column="21" selection-end-line="32" selection-end-column="21" />
+        <state relative-caret-position="561">
+          <caret line="57" column="27" selection-start-line="57" selection-start-column="27" selection-end-line="57" selection-end-column="27" />
           <folding>
             <element signature="e#24#41#0" expanded="true" />
           </folding>

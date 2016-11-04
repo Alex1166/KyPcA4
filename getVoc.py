@@ -47,9 +47,9 @@ def trpGetOntVocXML(prefix, name, path):
     triplex_string += vsptd.Trp('Q', 'OBJ', prefix)
     triplex_string += vsptd.Trp('Q', 'NAME', name)
     for r in root.findall('Rec'):
-        export_prefix = r.find('OBJ').text
-        export_name = r.find('NAME').text
-        if export_prefix == prefix and export_name == name:
+        col_prefix = r.find('OBJ').text
+        col_name = r.find('NAME').text
+        if col_prefix == prefix and col_name == name:
             frmt = r.find('FRMT').text
             triplex_string += vsptd.Trp('Q', 'FRMT', frmt)
             nm = r.find('NM').text
