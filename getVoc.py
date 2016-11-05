@@ -40,11 +40,10 @@ def trpGetOntVocSQL(prefix, name):
     q_table = sqlalchemy.Table('OSl_test_1', metadata, autoload=True)
     triplex_string = vsptd.TrpStr()
     for col in q_table.columns:
-        # поиск точки в названии столбца
-        dot = str(col).index(".")
-        # разделение названия таблицы и названия стобца
-        col_prefix = str(col)[:dot]
-        col_name = str(col)[dot+1:]
+        # разделение названия таблицы и названия стобца по точке
+        dot = str(col).split(".")
+        col_prefix = dot[0]
+        col_name = dot[1]
         # SQL-запрос для получения значения в ячейке
         sql_query = 'SELECT ' + col_name + ' FROM  ' + col_prefix + '  WHERE OBJ=:prefix and NAME=:name'
         result = engine.execute(sql_query, prefix=prefix, name=name).first()[0]
