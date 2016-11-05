@@ -75,7 +75,7 @@ def trpGetOntVocXML(prefix, name):
     triplex_string = vsptd.TrpStr()
     triplex_string += vsptd.Trp('Q', 'OBJ', prefix)
     triplex_string += vsptd.Trp('Q', 'NAME', name)
-    # перебор всех записей
+    # перебор всех записей в БД
     for r in root.findall('Rec'):
         col_prefix = r.find('OBJ').text
         col_name = r.find('NAME').text
