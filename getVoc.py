@@ -22,17 +22,32 @@ import vsptd
 
 # для БД на sql
 def trpGetOntVocSQL(prefix, name, path):
+    """
+    Получение словаря метаданных из базы данных, написанной на языке SQL
+            Принимает:
+                prefix - префикс реквизита
+                name - имя реквизита
+                path - путь к файлу, содержащему словари метаданных
+            Возвращает:
+                (TrpStr)
+    """
+    # подключение к базе данных
     engine = sqlalchemy.create_engine(r'sqlite:///' + path)
     metadata = sqlalchemy.MetaData(engine)
-    q_table = sqlalchemy.Table('Q', metadata, autoload=True)
+    # подключение к таблице
+    q_table = sqlalchemy.Table('OSl_test_1', metadata, autoload=True)
     triplex_string = vsptd.TrpStr()
     for col in q_table.columns:
-        col_prefix = str(col)[:1]
-        col_name = str(col)[2:]
+        # поиск точки в названии столбца
+        dot = str(col).index(".")
+        # разделение названия таблицы и названия стобца
+        col_prefix = str(col)[:dot]
+        col_name = str(col)[dot+1:]
+        # SQL-запрос для получения значения в ячейке
         sql_query = 'SELECT ' + col_name + ' FROM  ' + col_prefix + '  WHERE OBJ=:prefix and NAME=:name'
         result = engine.execute(sql_query, prefix=prefix, name=name).first()[0]
         if col_name != 'LINK':
-            triplet = vsptd.Trp(col_prefix, col_name, result)
+            triplet = vsptd.Trp('Q', col_name, result)
             triplex_string += triplet
         else:
             triplex_string += vsptd.parse_trp_str(result)
@@ -41,14 +56,26 @@ def trpGetOntVocSQL(prefix, name, path):
 
 # для БД на xml
 def trpGetOntVocXML(prefix, name, path):
+    """
+        Получение словаря метаданных из базы данных, написанной на языке XML
+                Принимает:
+                    prefix - префикс реквизита
+                    name - имя реквизита
+                    path - путь к файлу, содержащему словари метаданных
+                Возвращает:
+                    (TrpStr)
+    """
     tree = ET.ElementTree(file=path)
+    # получение структуры XML-базы
     root = tree.getroot()
     triplex_string = vsptd.TrpStr()
     triplex_string += vsptd.Trp('Q', 'OBJ', prefix)
     triplex_string += vsptd.Trp('Q', 'NAME', name)
+    # перебор всех записей
     for r in root.findall('Rec'):
         col_prefix = r.find('OBJ').text
         col_name = r.find('NAME').text
+        # поиск совпадений имени и префикса
         if col_prefix == prefix and col_name == name:
             frmt = r.find('FRMT').text
             triplex_string += vsptd.Trp('Q', 'FRMT', frmt)
