@@ -21,7 +21,7 @@ import vsptd
 
 
 # для БД на sql
-def trpGetOntVocSQL(prefix, name, path):
+def trpGetOntVocSQL(prefix, name):
     """
     Получение словаря метаданных из базы данных, написанной на языке SQL
             Принимает:
@@ -31,6 +31,8 @@ def trpGetOntVocSQL(prefix, name, path):
             Возвращает:
                 (TrpStr)
     """
+    path = r'test_sql_db_1.sqlite'
+
     # подключение к базе данных
     engine = sqlalchemy.create_engine(r'sqlite:///' + path)
     metadata = sqlalchemy.MetaData(engine)
@@ -55,7 +57,7 @@ def trpGetOntVocSQL(prefix, name, path):
 
 
 # для БД на xml
-def trpGetOntVocXML(prefix, name, path):
+def trpGetOntVocXML(prefix, name):
     """
         Получение словаря метаданных из базы данных, написанной на языке XML
                 Принимает:
@@ -65,6 +67,9 @@ def trpGetOntVocXML(prefix, name, path):
                 Возвращает:
                     (TrpStr)
     """
+    path = r'test_sql_db_2.xml'
+
+    # подключение к базе данных
     tree = ET.ElementTree(file=path)
     # получение структуры XML-базы
     root = tree.getroot()
