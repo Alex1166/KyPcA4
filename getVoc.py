@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import sqlalchemy
+from vsptd import Trp, TrpStr, parse_trp_str
+from sqlalchemy import create_engine, MetaData, Table
 import xml.etree.ElementTree as ET
-import vsptd
 
 
 # # для БД на mssql
@@ -10,18 +10,10 @@ import vsptd
 #     query = sqlalchemy.text('SELECT LINK FROM OSl_test_1 WHERE OBJ=:prefix and NAME=:name')
 #     result = engine.execute(query,{"prefix": prefix, "name": name}).first()[0]
 #     return vsptd.parse_triplex_string(result)
-#
-#
-# # для БД на sqlite
-# def trp_get_voc_sqlite(prefix, name, path):
-#     engine = sqlalchemy.create_engine(r'sqlite:///' + t)
-#     sql_query = 'SELECT LINK FROM OSl_test_1 WHERE OBJ=:prefix and NAME=:name'
-#     result = engine.execute(sql_query, prefix=prefix, name=name).first()[0]
-#     return vsptd.parse_triplex_string(result)
 
 
 # для БД на sql
-def trpGetOntVocSQL(prefix, name):
+def trpGetOntVocSQL(prefix, name, path=r'test_sql_db_1.sqlite'):
     """
     Получение словаря метаданных из базы данных, написанной на языке SQL
             Принимает:
@@ -31,32 +23,29 @@ def trpGetOntVocSQL(prefix, name):
             Возвращает:
                 (TrpStr)
     """
-    path = r'test_sql_db_1.sqlite'
 
     # подключение к базе данных
-    engine = sqlalchemy.create_engine(r'sqlite:///' + path)
-    metadata = sqlalchemy.MetaData(engine)
+    engine = create_engine(r'sqlite:///' + path)
+    metadata = MetaData(engine)
     # подключение к таблице
-    q_table = sqlalchemy.Table('OSl_test_1', metadata, autoload=True)
-    triplex_string = vsptd.TrpStr()
+    q_table = Table('OSl_test_1', metadata, autoload=True)
+    triplex_string = TrpStr()
     for col in q_table.columns:
         # разделение названия таблицы и названия стобца по точке
-        dot = str(col).split(".")
-        col_prefix = dot[0]
-        col_name = dot[1]
+        col_prefix, col_name = str(col).split(".")
         # SQL-запрос для получения значения в ячейке
         sql_query = 'SELECT ' + col_name + ' FROM  ' + col_prefix + '  WHERE OBJ=:prefix and NAME=:name'
         result = engine.execute(sql_query, prefix=prefix, name=name).first()[0]
         if col_name != 'LINK':
-            triplet = vsptd.Trp('Q', col_name, result)
+            triplet = Trp('Q', col_name, result)
             triplex_string += triplet
         else:
-            triplex_string += vsptd.parse_trp_str(result)
+            triplex_string += parse_trp_str(result)
     return triplex_string
 
 
 # для БД на xml
-def trpGetOntVocXML(prefix, name):
+def trpGetOntVocXML(prefix, name, path=r'test_sql_db_2.xml'):
     """
         Получение словаря метаданных из базы данных, написанной на языке XML
                 Принимает:
@@ -66,15 +55,14 @@ def trpGetOntVocXML(prefix, name):
                 Возвращает:
                     (TrpStr)
     """
-    path = r'test_sql_db_2.xml'
 
     # подключение к базе данных
     tree = ET.ElementTree(file=path)
     # получение структуры XML-базы
     root = tree.getroot()
-    triplex_string = vsptd.TrpStr()
-    triplex_string += vsptd.Trp('Q', 'OBJ', prefix)
-    triplex_string += vsptd.Trp('Q', 'NAME', name)
+    triplex_string = TrpStr()
+    triplex_string += Trp('Q', 'OBJ', prefix)
+    triplex_string += Trp('Q', 'NAME', name)
     # перебор всех записей в БД
     for r in root.findall('Rec'):
         col_prefix = r.find('OBJ').text
@@ -82,11 +70,11 @@ def trpGetOntVocXML(prefix, name):
         # поиск совпадений имени и префикса
         if col_prefix == prefix and col_name == name:
             frmt = r.find('FRMT').text
-            triplex_string += vsptd.Trp('Q', 'FRMT', frmt)
+            triplex_string += Trp('Q', 'FRMT', frmt)
             nm = r.find('NM').text
-            triplex_string += vsptd.Trp('Q', 'NM', nm)
+            triplex_string += Trp('Q', 'NM', nm)
             k = r.find('K').text
-            triplex_string += vsptd.Trp('Q', 'K', int(k))
+            triplex_string += Trp('Q', 'K', int(k))
             link = r.find('LINK').text
-            triplex_string += vsptd.parse_trp_str(link)
+            triplex_string += parse_trp_str(link)
     return triplex_string
