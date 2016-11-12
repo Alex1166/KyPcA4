@@ -1,80 +1,94 @@
 # -*- coding: utf-8 -*-
-from vsptd import Trp, TrpStr, parse_trp_str
+import re
+from vsptd import Trp, TrpStr, parse_trp_str, RE_TRIPLET
 from sqlalchemy import create_engine, MetaData, Table
+from sqlalchemy.exc import NoSuchTableError
 import xml.etree.ElementTree as ET
 
 
-# # для БД на mssql
-# def trp_get_voc_mssql(prefix, name, path):
-#     engine = sqlalchemy.create_engine('mssql+pyodbc://PC-ALEX/P3375_K_SBD_5_1_Ushakov?driver=ODBC+Driver+11+for+SQL+Server')
-#     query = sqlalchemy.text('SELECT LINK FROM OSl_test_1 WHERE OBJ=:prefix and NAME=:name')
-#     result = engine.execute(query,{"prefix": prefix, "name": name}).first()[0]
-#     return vsptd.parse_triplex_string(result)
+def sql_engine(type_db, path_db):
+    dialect = ''
+    driver = ''
+    if type_db == 1:
+        dialect = r'sqlite:///'
+    if type_db == 2:
+        # 'mssql+pyodbc://PC-ALEX/P3375_K_SBD_5_1_Ushakov?driver=ODBC+Driver+11+for+SQL+Server'
+        dialect = 'mssql+pyodbc://'
+        driver = '?driver=ODBC+Driver+11+for+SQL+Server'
+    if type_db == 3:
+        pass
+    return create_engine(dialect + path_db + driver)
 
 
-# для БД на sql
-def trpGetOntVocSQL(prefix, name, path=r'test_sql_db_1.sqlite'):
+def trpGetOntVoc(prefix, name, type_db, path_db, table_name=''):
     """
-    Получение словаря метаданных из базы данных, написанной на языке SQL
+    Получение словаря метаданных из базы данных
             Принимает:
                 prefix - префикс реквизита
                 name - имя реквизита
-                path - путь к файлу, содержащему словари метаданных
+                type_db - язык, на котором написана БД: 0 - xml, 1 - sqlite, 2 - mssql
+                path_db - путь к файлу, содержащему словари метаданных
+                table_name - имя таблицы, содержащей словарь, в этой БД
             Возвращает:
                 (TrpStr)
     """
 
-    # подключение к базе данных
-    engine = create_engine(r'sqlite:///' + path)
-    metadata = MetaData(engine)
-    # подключение к таблице
-    q_table = Table('OSl_test_1', metadata, autoload=True)
-    triplex_string = TrpStr()
-    for col in q_table.columns:
-        # разделение названия таблицы и названия стобца по точке
-        col_prefix, col_name = str(col).split(".")
-        # SQL-запрос для получения значения в ячейке
-        sql_query = 'SELECT ' + col_name + ' FROM  ' + col_prefix + '  WHERE OBJ=:prefix and NAME=:name'
-        result = engine.execute(sql_query, prefix=prefix, name=name).first()[0]
-        if col_name != 'LINK':
-            triplet = Trp('Q', col_name, result)
-            triplex_string += triplet
-        else:
-            triplex_string += parse_trp_str(result)
-    return triplex_string
+    if type_db == 0:
+        # подключение к базе данных
+        try:
+            tree = ET.ElementTree(file=path_db)
+        except FileNotFoundError:
+            return 'База данных по данному пути не найдена'
+        # получение структуры XML-базы
+        root = tree.getroot()
+        triplex_string = TrpStr()
+        # перебор всех записей в БД
+        for data in root.findall('ROWDATA'):
+            for row in data.iter('ROW'):
+                attributes = row.attrib
+                if attributes.get('Q.OBJ') == prefix and attributes.get('Q.NAME') == name:
 
+                    # ВАРИАНТ С ЗАШИТЫМИ ИМЕНАМИ СТОЛБЦОВ
+                    # columns = ['Q.OBJ', 'Q.NAME', 'Q.FRMT', 'Q.NM', 'Q.K', 'Q.LINK']
+                    # triplex_string = TrpStr()
+                    # for col in columns:
+                    #     xml_prefix, xml_name = col.split('.')
+                    #     xml_value = attributes.get(col)
+                    #     if col != 'Q.LINK':
+                    #         triplex_string += Trp(xml_prefix, xml_name, xml_value)
+                    #     else:
+                    #         triplex_string += parse_trp_str(xml_value)
 
-# для БД на xml
-def trpGetOntVocXML(prefix, name, path=r'test_sql_db_2.xml'):
-    """
-        Получение словаря метаданных из базы данных, написанной на языке XML
-                Принимает:
-                    prefix - префикс реквизита
-                    name - имя реквизита
-                    path - путь к файлу, содержащему словари метаданных
-                Возвращает:
-                    (TrpStr)
-    """
+                    # ВАРИАНТ С НЕИЗВЕСТНЫМИ ИМЕНАМИ СТОЛБЦОВ
+                    for attr in attributes:
+                        xml_value = attributes.get(attr)
+                        if attr != 'RowState':
+                            if re.match(RE_TRIPLET, xml_value) is None:
+                                xml_prefix, xml_name = attr.split('.')
+                                triplex_string += Trp(xml_prefix, xml_name, xml_value)
+                            else:
+                                triplex_string += parse_trp_str(xml_value)
+        return triplex_string
 
-    # подключение к базе данных
-    tree = ET.ElementTree(file=path)
-    # получение структуры XML-базы
-    root = tree.getroot()
-    triplex_string = TrpStr()
-    triplex_string += Trp('Q', 'OBJ', prefix)
-    triplex_string += Trp('Q', 'NAME', name)
-    # перебор всех записей в БД
-    for r in root.findall('Rec'):
-        col_prefix = r.find('OBJ').text
-        col_name = r.find('NAME').text
-        # поиск совпадений имени и префикса
-        if col_prefix == prefix and col_name == name:
-            frmt = r.find('FRMT').text
-            triplex_string += Trp('Q', 'FRMT', frmt)
-            nm = r.find('NM').text
-            triplex_string += Trp('Q', 'NM', nm)
-            k = r.find('K').text
-            triplex_string += Trp('Q', 'K', int(k))
-            link = r.find('LINK').text
-            triplex_string += parse_trp_str(link)
-    return triplex_string
+    else:
+        # подключение к базе данных
+        engine = sql_engine(type_db, path_db)
+        metadata = MetaData(engine)
+        # подключение к таблице
+        try:
+            q_table = Table(table_name, metadata, autoload=True)
+        except NoSuchTableError:
+            return 'Таблица с таким именем не найдена'
+        col_list = []
+        for col in q_table.columns:
+            col_list.append(col)
+        sql_query = q_table.select().where(col_list[0] == prefix and col_list[1] == name)
+        result = engine.execute(sql_query).fetchone()
+        triplex_string = TrpStr(Trp('Q', col_list[0].name, result[0]),
+                                Trp('Q', col_list[1].name, result[1]),
+                                Trp('Q', col_list[2].name, result[2]),
+                                Trp('Q', col_list[3].name, result[3]),
+                                Trp('Q', col_list[4].name, result[4]),
+                                )
+        triplex_string += parse_trp_str(result[5])
+        return triplex_string

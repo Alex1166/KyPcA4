@@ -1,20 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<data>
-    <Rec id="1">
-        <OBJ>E</OBJ>
-        <NAME>D</NAME>
-        <FRMT>999V99</FRMT>
-        <NM>Диаметр</NM>
-        <K>1</K>
-        <LINK>$VERT.NAME='DIAMETR'; $Sprut.NAME='Diam';</LINK>
-    </Rec>
-    <Rec id="2">
-        <OBJ>D</OBJ>
-        <NAME>TECH</NAME>
-        <FRMT>X(20)</FRMT>
-        <NM>Технолог</NM>
-        <K>1</K>
-        <LINK>$VERT.NAME='texnolog'; $Sprut.NAME='KodUserCreate';</LINK>
-    </Rec>
-</data>
+<DATAPACKET Version="2.0">
+    <METADATA>
+        <FIELDS>
+            <FIELD attrname="Q.OBJ" fieldtype="string" WIDTH="3" DisplayLabel="Имя_реквизита"/>
+            <FIELD attrname="Q.NAME" fieldtype="string" WIDTH="6" DisplayLabel="Характеристика_реквизита"/>
+            <FIELD attrname="Q.FRMT" fieldtype="string" WIDTH="10" DisplayLabel="Формат"/>
+            <FIELD attrname="Q.NM" fieldtype="string" WIDTH="40" DisplayLabel="Наименование"/>
+            <FIELD attrname="Q.K" fieldtype="string" WIDTH="3" DisplayLabel="Код_реквизита"/>
+            <FIELD attrname="Q.LINK" fieldtype="string" WIDTH="3" DisplayLabel="Перцепционная_информация"/>
+        </FIELDS>
+        <PARAMS CAPTION_TABLE="Список_параметров режущего инструмента" AdditionChar="$A.BLD='1';//"/>
+    </METADATA>
+    <ROWDATA>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="ADN" Q.FRMT="9999" Q.NM="Наружный диаметр круга" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="AH" Q.FRMT="999" Q.NM="Высота круга" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="AKU" Q.FRMT="X(3)" Q.NM="Класс неуравновешенности" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="ALF" Q.FRMT="99V99" Q.NM="Задний угол" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="AMMR" Q.FRMT="X(8)" Q.NM="Марка абразива" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="ANS" Q.FRMT="X(1)" Q.NM="Номер структуры" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="AST" Q.FRMT="X(5)" Q.NM="Степень твердости" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="ASV" Q.FRMT="X(3)" Q.NM="Связка" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="ATIP" Q.FRMT="X(4)" Q.NM="Тип круга" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="ATXT" Q.FRMT="X(60)" Q.NM="Tекст" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="AVR" Q.FRMT="X(8)" Q.NM="Рабочая скорость" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="AZR" Q.FRMT="X(5)" Q.NM="Зернистость" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="BD" Q.FRMT="9999" Q.NM="Ширина державки" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="BP" Q.FRMT="999V99" Q.NM="Ширина перемычки" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="BRK" Q.FRMT="999V99" Q.NM="Ширина главн.реж.кр." Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="BWK" Q.FRMT="99V99" Q.NM="Ширина вспом.реж.кр." Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="CI" Q.FRMT="9(5)" Q.NM="Стоимость" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="CTIP" Q.FRMT="X(8)" Q.NM="Пост.часть.типа инст" Q.K=""/>
+        <ROW RowState="4" Q.OBJ = "E" Q.NAME="D" Q.FRMT="9999V99" Q.NM="Диаметр" Q.K=""/>
+    </ROWDATA>
+</DATAPACKET>
