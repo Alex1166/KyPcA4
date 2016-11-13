@@ -10,14 +10,20 @@ from xml.dom import minidom
 def sql_engine(type_db, path_db):
     dialect = ''
     driver = ''
-    if type_db == 1:
+    if type_db == 'SQLite' or type_db == 1:
         dialect = r'sqlite:///'
-    if type_db == 2:
+
+    elif type_db == 'MS SQL Server' or type_db == 2:
         # 'mssql+pyodbc://PC-ALEX/P3375_K_SBD_5_1_Ushakov?driver=ODBC+Driver+11+for+SQL+Server'
         dialect = 'mssql+pyodbc://'
         driver = '?driver=ODBC+Driver+11+for+SQL+Server'
-    if type_db == 3:
+
+    elif type_db == 'MongoDB' or type_db == 3:
         pass
+
+    else:
+        raise ValueError('Неизвестная СУБД: ' + str(type_db))
+
     return create_engine(dialect + path_db + driver)
 
 
@@ -35,7 +41,7 @@ def trpPutOntVoc(prefix, name, trp_voc, type_db, path_db, table_name=''):
                 (TrpStr)
     """
 
-    if type_db == 0:
+    if type_db == 'XML' or type_db == 0:
         # подключение к базе данных
         try:
             tree = ET.ElementTree(file=path_db)
@@ -46,14 +52,17 @@ def trpPutOntVoc(prefix, name, trp_voc, type_db, path_db, table_name=''):
         # field_map = {'RowState': 0, 'Q.OBJ': 1, 'Q.NAME': 2, 'Q.FRMT': 3, 'Q.NM': 4, 'Q.K': 5, 'Q.LINK': 6}
         tree = ET.parse(path_db)
         root = tree.getroot()
+
+        # удаление строки с реквизитом с тем же префиксом и именем
         for data in root.findall('ROWDATA'):
             for row in data.iter('ROW'):
                 attributes = row.attrib
                 if attributes.get('Q.OBJ') == prefix and attributes.get('Q.NAME') == name:
                     data.remove(row)
+
         trp_list = list(parse_trp_str(trp_voc))
-        input_voc = {(trp.prefix + '.' + trp.name): trp.value for trp in trp_list[:3]}
-        link = ''.join(str(trp) for trp in trp_list[3:])
+        input_voc = {(trp.prefix + '.' + trp.name): trp.value for trp in trp_list if trp.prefix == 'Q'}
+        link = ''.join(str(trp) for trp in trp_list if trp.prefix != 'Q')
         input_voc.update({'Q.OBJ': prefix, 'Q.NAME': name, 'Q.LINK': link, 'RowState': "4"})
         new_row = ET.Element('ROW')
         new_row.attrib = input_voc
@@ -76,16 +85,16 @@ def trpPutOntVoc(prefix, name, trp_voc, type_db, path_db, table_name=''):
         col_list = []
         for col in q_table.columns:
             col_list.append(col)
-        trp_str = parse_trp_str(trp_voc)
 
+        # удаление строки с реквизитом с тем же префиксом и именем
         engine.execute(q_table.delete().where(and_(col_list[0] == prefix, col_list[1] == name)))
-        print(col_list)
-        print(trp_str)
+
         values = []
         link = ''
+        trp_str = parse_trp_str(trp_voc)
         for col in col_list:
             for trp in trp_str:
-                if trp.name == col.name:
+                if 'Q.' + trp.name == col.name:
                     if trp.prefix == 'Q':
                         if trp.value != prefix and trp.value != name:
                             values.append(trp.value)
