@@ -2,8 +2,9 @@
 import re
 from vsptd import Trp, TrpStr, parse_trp_str, RE_TRIPLET
 from sqlalchemy import create_engine, MetaData, Table
-from sqlalchemy.exc import NoSuchTableError
 from sqlalchemy.sql.expression import and_
+from sqlalchemy.exc import NoSuchTableError, OperationalError
+from sqlite3 import OperationalError as sqlite3_OperationalError
 import xml.etree.ElementTree as ET
 
 
@@ -54,8 +55,10 @@ def trpGetOntVoc(prefix, name, path_db, type_db, table_name=''):
         # подключение к таблице
         try:
             q_table = Table(table_name, metadata, autoload=True)
-        except NoSuchTableError:
+        except (NoSuchTableError):
             return 'Таблица с таким именем не найдена'
+        except (OperationalError, sqlite3_OperationalError):
+            return 'База данных по данному пути не найдена'
 
         # получение названий столбцов из таблицы
         col_list, pref_list, name_list = [], [], []
@@ -131,8 +134,11 @@ def trpPutOntVoc(prefix, name, trp_voc, path_db, type_db, table_name=''):
         # подключение к таблице
         try:
             q_table = Table(table_name, metadata, autoload=True)
-        except NoSuchTableError:
+        except (NoSuchTableError):
             return 'Таблица с таким именем не найдена'
+        except (OperationalError, sqlite3_OperationalError):
+            return 'База данных по данному пути не найдена'
+
         col_list = []
         for col in q_table.columns:
             col_list.append(col)
