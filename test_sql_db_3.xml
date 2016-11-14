@@ -30,9 +30,9 @@
         <ROW Q.FRMT="99V99" Q.K="" Q.NAME="BWK" Q.NM="Ширина вспом.реж.кр." Q.OBJ="E" RowState="4" />
         <ROW Q.FRMT="9(5)" Q.K="" Q.NAME="CI" Q.NM="Стоимость" Q.OBJ="E" RowState="4" />
         <ROW Q.FRMT="X(8)" Q.K="" Q.NAME="CTIP" Q.NM="Пост.часть.типа инст" Q.OBJ="E" RowState="4" />
-        <ROW Q.FRMT="999V99" Q.K="1" Q.LINK="$VERT.NAME='DIAMETR'; $Sprut.NAME='Diam';" Q.NAME="D" Q.NM="Диаметр" Q.OBJ="E" RowState="4" />
-        <ROW Q.FRMT="X(20)" Q.K="1" Q.LINK="$VERT.NAME='texnolog'; $Sprut.NAME='KodUserCreate';" Q.NAME="TECH" Q.NM="Технолог" Q.OBJ="D" RowState="4" />
-        <ROW Q.FRMT="X(20)" Q.K="1" Q.LINK="$VERT.NAME='department';$SPRUT.NAME='BURO';" Q.NAME="DEPART" Q.NM="Отдел разработки" Q.OBJ="D" RowState="4" />
+        <ROW Q.FRMT="X(20)" Q.K="1" Q.LINK="$VERT.NAME='texnolog';$SPRUT.NAME='KodUserCreate';" Q.NAME="TECH" Q.NM="Технолог" Q.OBJ="D" RowState="4" />
         <ROW Q.FRMT="999V99" Q.K="1" Q.LINK="$VERT.NAME='LEN';$SPRUT.NAME='Dlin';" Q.NAME="L" Q.NM="Длина" Q.OBJ="E" RowState="4" />
+        <ROW Q.FRMT="X(20)" Q.K="1" Q.LINK="$VERT.NAME='department';$SPRUT.NAME='BURO';" Q.NAME="DEPART" Q.NM="Отдел разработки" Q.OBJ="D" RowState="4" />
+        <ROW Q.FRMT="999V99" Q.K="1" Q.LINK="$VERT.NAME='DIAMETR';$SPRUT.NAME='Diam';" Q.NAME="D" Q.NM="Диаметр" Q.OBJ="E" RowState="4" />
     </ROWDATA>
 </DATAPACKET>
