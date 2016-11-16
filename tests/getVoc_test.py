@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import sys
 import ontVoc
-
+from time import time
 sys.path.append('..\\')
+t = time()
 
-# prefix = ""
-# name = ""
+prefix = ""
+name = ""
 
 prefix = "E"
 name = "D"
@@ -30,7 +31,7 @@ print(ontVoc.trpGetOntVoc(prefix, name, path_db='tests/db/test_sql_db_3.xml', ty
 #
 #
 # # ------------------SQLite-------------------------
-print(ontVoc.trpGetOntVoc(prefix, name, path_db='tests/db/test_sql_db_1.sqlite', type_db='SQLite', table_name='OSl_test_1'))
+# print(ontVoc.trpGetOntVoc(prefix, name, path_db='tests/db/test_sql_db_1.sqlite', type_db='SQLite', table_name='OSl_test_1'))
 # print(ontVoc.trpPutOntVoc(prefix, name, trpVoc, path_db='tests/db/test_sql_db_1.sqlite', type_db='SQLite', table_name='OSl_test_1'))
 #
 #
@@ -83,3 +84,5 @@ print(ontVoc.trpGetOntVoc(prefix, name, path_db='tests/db/test_sql_db_1.sqlite',
 #                     type_db='MS SQL Server',
 #                     table_name='OSl_test_1'
 #                     )
+
+print(time() - t)

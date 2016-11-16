@@ -6,8 +6,10 @@ from sqlalchemy.sql.expression import and_
 from sqlalchemy.exc import NoSuchTableError, OperationalError
 from sqlite3 import OperationalError as sqlite3_OperationalError
 import xml.etree.ElementTree as ET
+from functools import lru_cache
 
 
+@lru_cache(maxsize=32)
 def trpGetOntVoc(prefix, name, path_db, type_db, table_name=''):
     """
     Получение словаря метаданных из базы данных
@@ -52,7 +54,7 @@ def trpGetOntVoc(prefix, name, path_db, type_db, table_name=''):
         # выбор записей по совпадению префикса и имени
         for trp_str in str_list:
             if trp_str['Q.OBJ'] == prefix and trp_str['Q.NAME'] == name:
-                str_list_value.append(trp_str)
+                triplex_string = trp_str
             elif trp_str['Q.OBJ'] == prefix:
                 trp_str_list_prefix.append(trp_str)
             elif trp_str['Q.NAME'] == name:
@@ -71,7 +73,7 @@ def trpGetOntVoc(prefix, name, path_db, type_db, table_name=''):
                 return trp_str_list_prefix
             # если имя реквизита было введено, функция вернет одну строку с совпадающими префиксом и именем
             else:
-                return str_list_value
+                return triplex_string
 
     else:
         # подключение к базе данных
@@ -118,10 +120,14 @@ def trpGetOntVoc(prefix, name, path_db, type_db, table_name=''):
                                     Trp(pref_list[4], name_list[4], res[4]),
                                     )
             triplex_string += parse_trp_str(res[5])
-            res_list.append(triplex_string)
+            if prefix == '' or name == '':
+                res_list.append(triplex_string)
+            else:
+                return triplex_string
         return res_list
 
 
+@lru_cache(maxsize=32)
 def trpPutOntVoc(prefix, name, trp_voc, path_db, type_db, table_name=''):
     """
     Запись в словарь сторки метаданных, представленной в триплетной форме
@@ -208,6 +214,7 @@ def trpPutOntVoc(prefix, name, trp_voc, path_db, type_db, table_name=''):
                        )
 
 
+@lru_cache(maxsize=8)
 def sql_engine(type_db, path_db):
     """
     Функция создания движка базы данных
