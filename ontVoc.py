@@ -148,9 +148,6 @@ def trpPutOntVoc(prefix, name, trp_voc, path_db, type_db, table_name=''):
             return 'База данных по данному пути не найдена'
         # получение структуры XML-базы
         root = tree.getroot()
-        # field_map = {'RowState': 0, 'Q.OBJ': 1, 'Q.NAME': 2, 'Q.FRMT': 3, 'Q.NM': 4, 'Q.K': 5, 'Q.LINK': 6}
-        tree = ET.parse(path_db)
-        root = tree.getroot()
 
         # удаление строки с реквизитом с тем же префиксом и именем
         for data in root.findall('ROWDATA'):
